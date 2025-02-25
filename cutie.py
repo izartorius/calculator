@@ -11,3 +11,13 @@ def calculate():
     except Exception as e:
         messagebox.showerror("Error", f"Invalid Expression: {e}")
 
+
+def insert_value(value):
+    entry.insert(tk.END, value)
+
+def clear():
+    entry.delete(0, tk.END)
+
+root = tk.Tk()
+root.title("Calculator")
+root.geometry("400x500")
