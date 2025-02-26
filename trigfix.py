@@ -3,14 +3,17 @@ from tkinter import messagebox
 import math
 import re
 
+# Default mode is Degrees
 is_degrees = True
 
 def toggle_mode():
+    """Switch between Degrees and Radians mode"""
     global is_degrees
-    is_degrees = not is_degrees
-    mode_label.config(text=f"Mode: {'Degrees' if is_degrees else 'Radians'}")
+    is_degrees = not is_degrees  # Toggle mode
+    mode_label.config(text=f"Mode: {'Degrees' if is_degrees else 'Radians'}")  # Update label
 
 def evaluate_expression(expression):
+    """Evaluate mathematical expressions with trigonometric functions and logarithms"""
     try:
         global is_degrees
 
@@ -21,18 +24,20 @@ def evaluate_expression(expression):
             if end == -1:
                 raise ValueError("Unmatched parentheses in log function")
 
-            log_content = expression[start + 4:end]
-            parts = log_content.split(",")
+            log_content = expression[start + 4:end]  # Extract inside of log()
+            parts = log_content.split(",")  # Check if base is provided
             if len(parts) == 1:
-                log_result = math.log10(float(parts[0]))
+                log_result = math.log10(float(parts[0]))  # Default base 10
             elif len(parts) == 2:
-                log_result = math.log(float(parts[0]), float(parts[1]))
+                log_result = math.log(float(parts[0]), float(parts[1]))  # Custom base
             else:
                 raise ValueError("Invalid log format. Use log(value) or log(value, base)")
 
             expression = expression[:start] + str(log_result) + expression[end + 1:]
 
+        # Process trigonometric functions
         def replace_trig(match):
+            """Helper function to replace trig functions based on mode"""
             func = match.group(1)  # sin, cos, or tan
             value = match.group(2)  # The number inside the parentheses
             num_value = float(value)  # Convert to float
@@ -44,15 +49,15 @@ def evaluate_expression(expression):
 
         expression = re.sub(r"(sin|cos|tan)\((-?\d+(\.\d*)?)\)", replace_trig, expression)
 
+        # Evaluate final expression
         result = eval(expression, {"__builtins__": None}, math.__dict__)
         return result
 
     except Exception as e:
         return f"Error: {e}"
 
-
-
 def calculate():
+    """Handle calculation and display result"""
     try:
         expression = entry.get().strip()
         if not expression:
@@ -69,23 +74,25 @@ def calculate():
     except Exception as e:
         messagebox.showerror("Error", f"Invalid Expression: {e}")
 
-
-
 def insert_value(value):
+    """Insert numbers or symbols into entry field"""
     entry.insert(tk.END, value)
 
 def clear():
+    """Clear the entry field"""
     entry.delete(0, tk.END)
 
+# GUI Setup
 root = tk.Tk()
-root.title("Calculator")
-root.geometry("400x500")
+root.title("Scientific Calculator")
+root.geometry("400x400")
 
+# Display mode label
 mode_label = tk.Label(root, text="Mode: Degrees", font=("Arial", 12))
 mode_label.grid(row=0, column=0, columnspan=4, pady=5)
 
-entry = tk.Entry(root, font=("Arial", 18), bd=10, relief=tk.GROOVE, justify='right')
-entry.pack(fill=tk.BOTH, ipadx=8, padx=10, pady=10)
+entry = tk.Entry(root, width=30, font=("Arial", 14))
+entry.grid(row=1, column=0, columnspan=4, padx=10, pady=10)
 
 buttons = [
     ('7', 2, 0), ('8', 2, 1), ('9', 2, 2), ('/', 2, 3),
