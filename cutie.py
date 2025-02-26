@@ -79,13 +79,13 @@ def clear():
 
 root = tk.Tk()
 root.title("Calculator")
-root.geometry("400x500")
 
 mode_label = tk.Label(root, text="Mode: Degrees", font=("Arial", 12))
 mode_label.grid(row=0, column=0, columnspan=4, pady=5)
 
 entry = tk.Entry(root, font=("Arial", 18), bd=10, relief=tk.GROOVE, justify='right')
-entry.pack(fill=tk.BOTH, ipadx=8, padx=10, pady=10)
+entry.grid(row=1, column=0, columnspan=4, sticky="nsew", padx=10, pady=10)
+
 
 buttons = [
     ('7', 2, 0), ('8', 2, 1), ('9', 2, 2), ('/', 2, 3),
